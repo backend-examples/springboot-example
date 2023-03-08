@@ -1,0 +1,84 @@
+server:
+  tomcat:
+    relaxed-query-chars: [ '|','{','}','[',']' ]
+    relaxed-path-chars: [ '|','{','}','[',']' ]
+
+spring:
+  main:
+    banner-mode: "console"
+    allow-bean-definition-overriding: true
+  profiles:
+    active: @activatedProperties@ # 这里引用的是pom.xml中配置的key，@activatedProperties@ 中内如必须与 profile=>properties=> activatedProperties节点一致
+  jackson:
+    # 统一转换日期格式
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  datasource:
+    hikari:
+      # 数据库连接超时时间,默认30秒，即30000
+      connection-timeout: 30000
+      validation-timeout: 3000
+      # 空闲连接存活最大时间，默认600000（10分钟）
+      idle-timeout: 600000
+      login-timeout: 5
+      # 连接池中连接最大的声明周期,默认是 1800000 （30分钟）
+      max-lifetime: 1800000
+      # 连接池最大连接数，默认是10
+      maximum-pool-size: 10
+      # 最小空闲连接数量
+      minimum-idle: 5
+      read-only: false
+  redis:
+    # Redis数据库索引（默认为0）
+    database: 0
+    # Redis服务器地址
+    host: 101.35.44.70
+    # Redis服务器连接端口号
+    port: 6060
+    # 如果未单独配置默认为空即可
+    password: root
+    # 连接超时时间
+    timeout: 1000
+    jedis:
+      pool:
+        # 连接池中最大连接数（使用负值则表示没有限制）
+        max-active: 8
+        # 连接池中最大阻塞等待时间（使用负值则表示没有限制）
+        max-wait: -1
+        # 连接池中的最大空闲连接
+        max-idle: 8
+        # 连接池中的最小空闲连接
+        min-idle: 0
+  task:
+    scheduling:
+      pool:
+        size: 5
+      shutdown:
+        #关闭应用程序时，是否等待任务执行完毕
+        await-termination: true
+        await-termination-period: 60000
+mybatis:
+  type-aliases-package: com.example.pojo
+  config-location: classpath:sqlMapConfig.xml
+  mapper-locations: classpath:mappers/*.xml
+#logging:
+logging:
+  level:
+    root: info
+    org.springframework.web: warn
+    com.hnpolice: debug
+  config: classpath:logback.xml
+# 定时器
+schedule:
+  # 配置核心线程数
+  pool-size: 5
+  remove-on-cancel-policy: true
+  # 配置线程池中的线程的名称前缀
+  thread-name-prefix: async-service-
+  thread-group-name: async-
+FFmpeg:
+  ffmpeg-win-path: /ffmpeg-win/bin/ffmpeg.exe
+  ffmpeg-linux-path: ffmpeg/ffmpeg
+  ffprobe-win-path: /ffmpeg-win/bin/ffprobe.exe
+  ffprobe-linux-path: ffmpeg/ffprobe
+
